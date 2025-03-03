@@ -1,0 +1,10 @@
+@url = http://localhost:5000
+### scan folder and return 
+POST {{url}}/add-folder
+Content-Type: application/json
+
+{
+  "folderName": "HDA config",
+  "folderLocation": "D:\\_repo\\hda\\server\\config",
+  "contentType": "documents"
+}
