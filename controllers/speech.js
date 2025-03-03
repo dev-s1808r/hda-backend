@@ -10,6 +10,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const client = new speech.SpeechClient({
   keyFilename: path.resolve(
     __dirname,
+    "..",
+    "lisc",
     "round-music-450811-g5-ca7499541424.json"
   ),
 });
