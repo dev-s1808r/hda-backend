@@ -1,0 +1,33 @@
+All videos, audios and photos are stored in one separate folder.
+
+Code automatically assigns the next file which has not been touched to the moderator once he finishes the previous assignment.
+
+Admin assigns touched files to moderators purely for verifications. (pending verification, pending data entry)
+
+Admin to add more content in the folder. 
+
+When verification is done, it becomes visible to the users. 
+
+Duration, event locations, name of event, 
+timestamps (data field) (start and end timing)
+
+
+media: {
+  type: [audio, video, photo]
+  title: 
+  description: 
+  eventLocation: 
+  eventName: 
+  isTouched: false by default
+  isVerified: false by default
+  timeStamp: [
+    {startTime, endTime, event}
+  ]
+}
+
+
+user: {
+  emailId: 
+  password: 
+  role: [sevarthi, moderator, admin]
+}

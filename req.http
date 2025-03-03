@@ -1,0 +1,50 @@
+@url = http://localhost:5000
+
+### login 
+POST {{url}}/login
+Content-Type: application/json
+
+ {
+  "email": "sourabh.raghavendra@gmail.com",
+  "password": "password"
+ }
+
+### register 
+POST {{url}}/register
+Content-Type: application/json
+
+ {
+  "email": "sourabh.raghavendra@gmail.com",
+  "password": "password"
+ }
+
+
+ 
+### scan content
+POST {{url}}/scan-static?type=photos
+
+
+### get content
+GET {{url}}/scan-static?type=videos&page=2
+
+
+### get media
+GET {{url}}/media/67ac75e2fee8de0211054a62
+
+
+### patch media
+PATCH {{url}}/assign-new-media
+Content-Type: application/json
+
+ {
+  "userId": "67aca34e939ca408426dbb36"
+ }
+
+
+### convert speech
+POST {{url}}/speech/convert
+Content-Type: application/json
+
+ {
+  "fileUrl": "http://localhost:5000/static/videos/19.mp4"
+ }
