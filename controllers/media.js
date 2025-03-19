@@ -1,6 +1,6 @@
 const { Media, User } = require("../models/models");
 
-const mediaTypes = ["audios", "videos", "photos"];
+// const mediaTypes = ["audios", "videos", "photos"];
 
 const findMediaById = async (req, res) => {
   const { mediaId } = req.params;
@@ -36,8 +36,10 @@ const markTouched = async (req, res) => {
   const user = await User.findById(userId);
   if (!user) return res.status(404).json({ error: "User not found" });
 
-  const mediaType = mediaTypes[Math.floor(Math.random() * mediaTypes.length)];
-  const newMedia = await Media.findOne({ mediaType, isAssigned: false });
+  console.log("old assigned media: ", user.assignedMedia._id);
+
+  // const mediaType = mediaTypes[Math.floor(Math.random() * mediaTypes.length)];
+  const newMedia = await Media.findOne({ isAssigned: false });
 
   if (newMedia) {
     user.assignedMedia = newMedia;
@@ -45,7 +47,11 @@ const markTouched = async (req, res) => {
     await newMedia.save();
   }
 
-  console.log(user.assignedMedia);
+  if (!newMedia) {
+    return res.status(404).send("Need more content");
+  }
+
+  console.log("new assigned media: ", user.assignedMedia._id);
 
   await user.save();
   res

@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../config/config");
 const { User, Media } = require("../models/models");
 
-const mediaTypes = ["audios", "videos", "photos"];
-
 const register = async (req, res) => {
   const { email, password } = req.body;
 
@@ -21,18 +19,27 @@ const register = async (req, res) => {
     password: hashedPassword,
   });
 
-  const mediaType = mediaTypes[Math.floor(Math.random() * mediaTypes.length)];
-  const media = await Media.findOne({ mediaType, isAssigned: false });
-  console.log(media);
-  newUser.assignedMedia = media;
-  media.isAssigned = true;
-  await media.save();
-  await newUser.save();
+  const media = await Media.findOne({ isAssigned: false });
 
-  res.status(201).json({
-    message: "User registered successfully",
-    user: { id: newUser._id, email: newUser.email },
-  });
+  if (!media) {
+    return res.status(404).send(`there is no content`);
+  }
+
+  if (media) {
+    newUser.assignedMedia = media;
+    media.isAssigned = true;
+    await media.save();
+    await newUser.save();
+
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: newUser._id, email: newUser.email },
+    });
+  } else {
+    res.status(500).json({
+      message: "something went wrong",
+    });
+  }
 };
 
 const login = async (req, res) => {

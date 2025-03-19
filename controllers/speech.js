@@ -67,9 +67,53 @@ function extractAudio(videoPath, outputAudioPath) {
 /**
  * Chunk audio into 50-second segments with a 10-minute limit
  */
+// async function chunkAudio(inputAudioPath) {
+//   const segmentDuration = 50; // 50 seconds
+//   const maxDuration = 120; // 10 minutes
+//   const chunks = [];
+
+//   console.log(`[INFO] Calculating total audio duration...`);
+//   const { stdout } = await execPromise(
+//     `ffprobe -i "${inputAudioPath}" -show_entries format=duration -v quiet -of csv="p=0"`
+//   );
+
+//   let totalDuration = Math.ceil(parseFloat(stdout));
+//   console.log(`[INFO] Total audio duration: ${totalDuration} seconds`);
+
+//   // Limit to the first 10 minutes
+//   totalDuration = Math.min(totalDuration, maxDuration);
+
+//   for (let start = 0; start < totalDuration; start += segmentDuration) {
+//     const chunkPath = path.join(
+//       path.dirname(inputAudioPath),
+//       `chunk_${start}.wav`
+//     );
+//     console.log(
+//       `[INFO] Creating chunk: ${chunkPath} (from ${start}s to ${Math.min(
+//         start + segmentDuration,
+//         totalDuration
+//       )}s)`
+//     );
+//     const command = `ffmpeg -y -i "${inputAudioPath}" -ss ${start} -t ${segmentDuration} -acodec pcm_s16le -ar 16000 -ac 1 "${chunkPath}"`;
+//     await execPromise(command);
+//     chunks.push({
+//       startTime: start,
+//       endTime: Math.min(start + segmentDuration, totalDuration),
+//       path: chunkPath,
+//     });
+//   }
+
+//   console.log(
+//     `[INFO] Audio chunking complete. Total chunks created: ${chunks.length}`
+//   );
+//   return chunks;
+// }
+
+/**
+ * Chunk audio into 50-second segments with a dynamically set max duration
+ */
 async function chunkAudio(inputAudioPath) {
-  const segmentDuration = 50; // 50 seconds
-  const maxDuration = 120; // 10 minutes
+  const segmentDuration = 50; // 50 seconds per chunk
   const chunks = [];
 
   console.log(`[INFO] Calculating total audio duration...`);
@@ -80,10 +124,10 @@ async function chunkAudio(inputAudioPath) {
   let totalDuration = Math.ceil(parseFloat(stdout));
   console.log(`[INFO] Total audio duration: ${totalDuration} seconds`);
 
-  // Limit to the first 10 minutes
-  totalDuration = Math.min(totalDuration, maxDuration);
+  // Instead of hardcoding maxDuration, we use totalDuration itself
+  const maxDuration = totalDuration; // No artificial limit
 
-  for (let start = 0; start < totalDuration; start += segmentDuration) {
+  for (let start = 0; start < maxDuration; start += segmentDuration) {
     const chunkPath = path.join(
       path.dirname(inputAudioPath),
       `chunk_${start}.wav`
@@ -91,14 +135,14 @@ async function chunkAudio(inputAudioPath) {
     console.log(
       `[INFO] Creating chunk: ${chunkPath} (from ${start}s to ${Math.min(
         start + segmentDuration,
-        totalDuration
+        maxDuration
       )}s)`
     );
     const command = `ffmpeg -y -i "${inputAudioPath}" -ss ${start} -t ${segmentDuration} -acodec pcm_s16le -ar 16000 -ac 1 "${chunkPath}"`;
     await execPromise(command);
     chunks.push({
       startTime: start,
-      endTime: Math.min(start + segmentDuration, totalDuration),
+      endTime: Math.min(start + segmentDuration, maxDuration),
       path: chunkPath,
     });
   }

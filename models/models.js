@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["sevarthi", "moderator", "admin"],
-    default: "sevarthi",
+    default: "admin",
   },
   assignedMedia: {
     type: Object,

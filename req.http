@@ -14,14 +14,14 @@ POST {{url}}/auth/register
 Content-Type: application/json
 
  {
-  "email": "s1808r1@gmail.com",
+  "email": "sourabh.raghavendra@gmail.com",
   "password": "password"
  }
 
 
  
 ### scan content
-POST {{url}}/scan-static?type=photos
+POST {{url}}/folders/scan-static?type=videos
 
 
 ### get content
