@@ -71,12 +71,30 @@ const dbMetaSchema = new mongoose.Schema({
   photosPages: Number,
 });
 
+const activityLogSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: false,
+  }, // optional
+  action: { type: String, required: true },
+  endpoint: { type: String },
+  method: { type: String },
+  timestamp: { type: Date, default: Date.now },
+  statusCode: { type: Number },
+  ip: { type: String },
+  userAgent: { type: String },
+  metadata: { type: Object }, // Optional: any additional data
+});
+
 const User = mongoose.model("User", userSchema);
 const Media = mongoose.model("Media", mediaSchema);
 const DbMeta = mongoose.model("DbMeta", dbMetaSchema);
+const ActivityLog = mongoose.model("ActivityLog", activityLogSchema);
 
 module.exports = {
   User,
   Media,
   DbMeta,
+  ActivityLog,
 };

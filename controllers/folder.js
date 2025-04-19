@@ -1,7 +1,7 @@
 const path = require("path");
 const { Media, DbMeta } = require("../models/models");
 const { scanStaticDirectory, scan } = require("../utils/scanFolder");
-const { staticPath, baseUrl } = require("../config/config");
+const { staticPath, baseUrl, scanPassword } = require("../config/config");
 
 const staticDirectory = path.resolve(staticPath);
 
@@ -63,6 +63,11 @@ const scanStaticContent = async (req, res) => {
 const scanForVideos = async (req, res) => {
   console.log("scanning");
   const { type } = req.query;
+  const { password } = req.body;
+  if (password !== scanPassword) {
+    return res.status(400).send("Wrong password");
+  }
+  console.log(password, "password");
   let files = await scan(staticDirectory, baseUrl, type);
   let data = await Media.insertMany(files);
   let mediaCount = await Media.countDocuments();
@@ -77,7 +82,7 @@ const getContent = async (req, res) => {
   let { type, page = 1 } = req.query;
   console.log(type);
   page = Number(page);
-  const mediaFiles = await Media.find({ mediaType: type })
+  const mediaFiles = await Media.find()
     .skip((page - 1) * 10) // Skip previous pages
     .limit(10) // Get only `limit` items
     .exec();

@@ -97,13 +97,13 @@ async function scan(staticPath, baseUrl, type) {
     }
 
     let allFiles = await fs.readdir(folderPath);
-    console.log(allFiles);
+    // console.log(allFiles);
     let mediaFiles = await Media.find({ mediaType: [type] });
     let names = mediaFiles.map((media) => media.pseudoName);
-    console.log(names);
+    // console.log(names);
 
     let files = allFiles.filter((f) => !names.includes(f));
-    console.log(files);
+    // console.log(files);
 
     console.log(files.length);
     // console.log(files);

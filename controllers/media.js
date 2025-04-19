@@ -1,9 +1,19 @@
+const mongoose = require("mongoose");
 const { Media, User } = require("../models/models");
 
 // const mediaTypes = ["audios", "videos", "photos"];
 
 const findMediaById = async (req, res) => {
   const { mediaId } = req.params;
+
+  if (
+    !mediaId ||
+    mediaId === "undefined" ||
+    !mongoose.Types.ObjectId.isValid(mediaId)
+  ) {
+    return res.status(400).send("Invalid or missing media ID");
+  }
+
   const mediaFile = await Media.findById(mediaId);
   console.log(mediaId);
   if (!mediaFile) return res.status(404).send("Media file not found");
@@ -57,6 +67,7 @@ const markTouched = async (req, res) => {
   res
     .status(200)
     .json({ message: "Media updated", assignedMedia: user.assignedMedia });
+  // res.status(200).json({ message: "Media updated" });
 };
 
 const markVerified = async (req, res) => {
@@ -85,6 +96,7 @@ const isVerified = async (req, res) => {
 
 const updateMedia = async (req, res) => {
   const { mediaId, formData } = req.body;
+  console.log(formData);
   if (!mediaId || !formData) {
     return res.status(400).json({ error: "mediaId and formData are required" });
   }

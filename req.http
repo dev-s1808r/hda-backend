@@ -25,7 +25,7 @@ POST {{url}}/folders/scan-static?type=videos
 
 
 ### get content
-GET {{url}}/scan-static?type=videos&page=2
+GET {{url}}/folders/scan-static?type=videos&page=1
 
 
 ### get media
